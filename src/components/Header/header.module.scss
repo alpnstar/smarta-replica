@@ -1,0 +1,36 @@
+.header {
+  background-color: #30334e;
+  border-radius: 0 0 40px 40px;
+  padding: 8px 60px;
+
+  &__wrapper {
+    display: grid;
+    align-items: center;
+    gap: 60px;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .logo {
+    width: 92px;
+    height: 36px;
+  }
+
+  ul {
+    display: flex; /* Включаем Grid */
+    grid-template-columns: repeat(auto-fit, max-content); /* Колонки зависят от ширины содержимого */
+    gap: 32px; /* Расстояние между элементами */
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    justify-content: start; /* Выравниваем сетку по левому краю */
+  }
+
+  li {
+    margin: 0; /* Убираем отступы у элементов списка */
+    color: white;
+
+    &:nth-child(2) {
+      color: #e23d66;
+    }
+  }
+}

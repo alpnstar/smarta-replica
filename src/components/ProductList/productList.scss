@@ -1,0 +1,9 @@
+.products {
+  flex-grow: 1;
+  flex-basis: 0;
+  &__wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(315px, 315px));
+    gap: 20px;
+  }
+}

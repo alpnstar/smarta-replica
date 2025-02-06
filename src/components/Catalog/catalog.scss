@@ -1,0 +1,37 @@
+.catalog {
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  aside {
+    display: block;
+    flex-grow: 0.25;
+    flex-basis: 0;
+  }
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    &-title {
+      font-weight: 700;
+    }
+    &-price {
+      display: flex;
+      gap: 5px;
+
+      input {
+        border: 0;
+        width: 100%;
+        padding: 16px 18px;
+        font-size: 16px;
+        background-color: #fff;
+        border-radius: 12px;
+        caret-color: #e23d66;
+      }
+    }
+  }
+}
