@@ -6,14 +6,12 @@ import {ApiResponse} from "@/types/api";
 import {Product} from "@/types/products";
 
 interface CatalogProps {
-    params: any,
     searchParams?: string,
 }
 
-async function getData(searchParams: string, params: any = {}) {
-    const paramsTemplate = `${params['brand'] ? 'filters[brand_id]=' + params['brand'] : ''}${params['model'] ? '&filters[model_id]=' + params['model'] : ''}`;
+async function getData(searchParams: string) {
     const searchParamsTemplate = searchParams ? '&' + searchParams : '';
-    const response = await fetch('http://localhost:1337/api/products?populate=image&' + paramsTemplate + searchParamsTemplate,
+    const response = await fetch('http://localhost:1337/api/products?populate=image&' + searchParamsTemplate,
         {
             cache: 'no-cache',
 
@@ -21,8 +19,8 @@ async function getData(searchParams: string, params: any = {}) {
     return await response.json() as Promise<ApiResponse<Product[]>>;
 }
 
-export const Catalog: FC<CatalogProps> = async ({params, searchParams}) => {
-    const data = await getData(searchParams || '', params);
+export const Catalog: FC<CatalogProps> = async ({searchParams}) => {
+    const data = await getData(searchParams || '');
     return (
         <div className={"catalog"}>
             <div className="catalog__wrapper container">

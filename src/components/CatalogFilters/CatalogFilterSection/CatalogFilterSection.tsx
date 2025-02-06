@@ -11,7 +11,7 @@ interface ICatalogFilterSectionProps {
     setParams: Dispatch<SetStateAction<any>>
 }
 
-export const CatalogFilterSection: FC<ICatalogFilterSectionProps> = ({items, title, filterLabel, params, setParams}) => {
+export const    CatalogFilterSection: FC<ICatalogFilterSectionProps> = ({items, title, filterLabel, params, setParams}) => {
     return (
         <div className="catalog__filters-section">
             <span className="catalog__filters-title">{title}</span>

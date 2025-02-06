@@ -8,6 +8,7 @@ export interface Model {
     updatedAt: string;
     publishedAt: string;
     model_id: string;
+    brand_id: string;
 }
 
 export  type ModelsResponse = ApiResponse<Model[]>;
