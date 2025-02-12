@@ -1,8 +1,29 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, Middleware} from "@reduxjs/toolkit";
 import {Brand, BrandsResponse} from "@/types/brands";
 import axios from "axios";
 import {MemoriesResponse, Memory} from "@/types/memories";
 import {Model, ModelsResponse} from "@/types/models";
+import {IAndFilter, IOrFilter} from "@/types/catalogFilters";
+import qs from "qs";
+import {RootState} from "@/store/rootReducer";
+
+
+export const onChangeSearchParams: Middleware<object, RootState> = store => next => (action) => {
+    const typedAction = action as { type: string };
+    next(action);
+    if (
+        typedAction.type === filtersActions.addBrandsParamsItem.type
+        || typedAction.type === filtersActions.deleteBrandsParamsItem.type
+        || typedAction.type === filtersActions.setBrandsParams.type
+        || typedAction.type === filtersActions.setModelsParams.type
+        || typedAction.type === filtersActions.deleteModelsParamsItem.type
+        || typedAction.type === filtersActions.addModelsParamsItem.type
+        || typedAction.type === filtersActions.setPriceParams.type
+
+    ) {
+        store.dispatch(filtersActions.generateSearchParams());
+    }
+};
 
 
 export const getBrands = createAsyncThunk<
@@ -40,32 +61,109 @@ export const getModels = createAsyncThunk<ModelsResponse>('models/getModels', as
 })
 
 interface InitialState {
-    brands: Brand[],
-    models: Model[],
-    memories: Memory[],
+    brandsData: Brand[],
+    modelsData: Model[],
+    memoriesData: Memory[],
+    generatedSearchParams: string | null,
+    brandsParams: IOrFilter,
+    modelsParams: IOrFilter,
+    memoriesParams: IOrFilter,
+    priceParams: IAndFilter,
 }
 
-const initialState = {
-    brands: [],
-    models: [],
-    memories: [],
+const initialState: InitialState = {
+    brandsData: [],
+    modelsData: [],
+    memoriesData: [],
+    generatedSearchParams: null,
+    brandsParams: {$or: []},
+    modelsParams: {$or: []},
+    memoriesParams: {$or: []},
+    priceParams: {$and: []},
+
 }
 const filtersSlice = createSlice({
     name: 'filters',
     initialState,
-    reducers: {},
+    reducers: {
+        setBrandsParams(state, {payload}: { payload: IOrFilter }) {
+            state.brandsParams = payload;
+        },
+        addBrandsParamsItem(state, {payload}: {
+            payload: string
+        }) {
+            const searchResult = state.brandsParams.$or.findIndex((el: any) => el.brand_id === payload);
+            if (searchResult === -1) {
+                state.brandsParams.$or.push({
+                    brand_id: payload,
+                });
+            }
+
+        },
+        deleteBrandsParamsItem(state, {payload}: { payload: string }) {
+            const searchResult = state.brandsParams.$or.findIndex((el: any) => el.brand_id === payload);
+            if (searchResult !== -1) {
+                state.brandsParams.$or = [
+                    ...state.brandsParams.$or.slice(0, searchResult),
+                    ...state.brandsParams.$or.slice(searchResult + 1)
+                ]
+            }
+
+        },
+        setModelsParams(state, {payload}: { payload: IOrFilter }) {
+            state.modelsParams = payload;
+        },
+        addModelsParamsItem(state, {payload}: {
+            payload: string
+        }) {
+            const searchResult = state.modelsParams.$or.findIndex((el: any) => el.model_id === payload);
+            if (searchResult === -1) {
+                state.modelsParams.$or.push({
+                    model_id: payload,
+                });
+            }
+
+        },
+        deleteModelsParamsItem(state, {payload}: { payload: string }) {
+            const searchResult = state.modelsParams.$or.findIndex((el: any) => el.model_id === payload);
+            if (searchResult !== -1) {
+                state.modelsParams.$or = [
+                    ...state.modelsParams.$or.slice(0, searchResult),
+                    ...state.modelsParams.$or.slice(searchResult + 1)
+                ]
+            }
+
+        },
+
+        setPriceParams(state, {payload}: { payload: IAndFilter }) {
+            state.priceParams = payload;
+        },
+
+        generateSearchParams(state) {
+            state.generatedSearchParams = qs.stringify({
+                    filters: {
+                        $and: [
+                            state.brandsParams,
+                            state.modelsParams,
+                            state.priceParams
+                        ]
+                    }
+                }
+                , {
+                    encodeValuesOnly: true, // prettify URL
+                })
+        },
+    },
     extraReducers: builder => {
         builder.addCase(getBrands.fulfilled, (state, {payload}) => {
-            state.brands = payload.data;
+            state.brandsData = payload.data;
         });
         builder.addCase(getModels.fulfilled, (state, {payload}) => {
-            state.models = payload.data;
+            state.modelsData = payload.data;
         });
         builder.addCase(getMemories.fulfilled, (state, {payload}) => {
-            state.memories = payload.data;
+            state.memoriesData = payload.data;
         })
-
-
     }
 
 })

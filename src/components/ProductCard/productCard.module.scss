@@ -6,15 +6,19 @@
   gap: 22px;
   background-color: #ffffff;
   border-radius: 24px;
+
   &_title {
     font-size: 14px;
     font-weight: 300;
   }
+
   &_description {
     display: flex;
     justify-content: space-between;
     align-items: end;
     gap: 8px;
+    margin-top: auto !important;
+    
   }
 
 
@@ -23,6 +27,11 @@
   }
 
   &_old_price {
+    display: flex;
+    gap: 4px;
+  }
+
+  &_old_price_title {
     display: inline-block;
     position: relative;
     color: #818699;
@@ -41,6 +50,18 @@
       background-color: red;
 
     }
+  }
+
+  &_discount_size {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    color: #e23d66;
+    font-weight: 400;
+    font-size: 12px;
+    border: 1px solid #e23d66;
+    border-radius: 4px;
   }
 
   &_preview {

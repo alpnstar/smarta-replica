@@ -4,6 +4,7 @@ import {ProductList} from "@/components/ProductList/ProductList";
 import './catalog.scss';
 import {ApiResponse} from "@/types/api";
 import {Product} from "@/types/products";
+import {Breadcrumbs} from "@/components/UI/Breadcrumbs/Breadcrumbs";
 
 interface CatalogProps {
     searchParams?: string,
@@ -24,10 +25,13 @@ export const Catalog: FC<CatalogProps> = async ({searchParams}) => {
     return (
         <div className={"catalog"}>
             <div className="catalog__wrapper container">
-                <aside>
-                    <CatalogFilters/>
-                </aside>
-                {data.data ? <ProductList products={data.data}/> : 'Ничего не найдено'}
+                <Breadcrumbs items={['Каталог']}/>
+                <div className="catalog__main">
+                    <aside>
+                        <CatalogFilters/>
+                    </aside>
+                    {data.data ? <ProductList products={data.data}/> : 'Ничего не найдено'}
+                </div>
             </div>
         </div>
     );

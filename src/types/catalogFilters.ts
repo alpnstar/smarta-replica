@@ -1,11 +1,13 @@
 // Тип для условий (например, price: { $gte: "1", $lte: "1" })
 export interface ICondition {
     $gte?: string;
+    '[$gte]'?: string;
     $lte?: string;
+    '[$lte]'?: string;
 }
 
 // Тип для отдельного фильтра (например, { brand_id: "apple" })
-type FieldFilter = {
+export type FieldFilter = {
     [key: string]: string | ICondition;
 };
 
@@ -21,9 +23,11 @@ export interface IAndFilter {
 
 // Основной интерфейс для структуры
 export interface IFilters {
-    filters: {
-        $and: Array<IAndFilter | IOrFilter | FieldFilter>;
-    };
+    filters: IFilterLabel;
+}
+
+export interface IFilterLabel {
+    $and: Array<IAndFilter | IOrFilter | FieldFilter>;
 }
 
 // Пример использования
@@ -32,13 +36,13 @@ const filters: IFilters = {
         $and: [
             {
                 $or: [
-                    { brand_id: "apple" },
-                    { brand_id: "samsung" }
+                    {brand_id: "apple"},
+                    {brand_id: "samsung"}
                 ]
             },
             {
                 $or: [
-                    { model_id: "iphone-16-pro-max" }
+                    {model_id: "iphone-16-pro-max"}
                 ]
             },
             {

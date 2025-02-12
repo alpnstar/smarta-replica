@@ -61,6 +61,7 @@ export interface Product {
     documentId: string;
     title: string;
     price: number;
+    old_price: number;
     createdAt: string; // Используем строку, так как это ISO-8601 формат даты
     updatedAt: string; // Используем строку, так как это ISO-8601 формат даты
     publishedAt: string; // Используем строку, так как это ISO-8601 формат даты

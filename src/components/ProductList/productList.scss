@@ -1,9 +1,29 @@
 .products {
   flex-grow: 1;
   flex-basis: 0;
+
   &__wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(315px, 315px));
+    grid-template-columns: repeat(auto-fit, minmax(319px, 319px));
     gap: 20px;
+  }
+
+  &__sort {
+    margin-bottom: 20px;
+    justify-self: end;
+    display: flex;
+    gap: 20px;
+
+    &-item {
+      color: #e23d66;
+      font-weight: 300;
+      border-bottom: 1px #e23d66 solid;
+      transition: 0.1s;
+
+      &.--active {
+        font-weight: 700;
+        border-bottom: none;
+      }
+    }
   }
 }

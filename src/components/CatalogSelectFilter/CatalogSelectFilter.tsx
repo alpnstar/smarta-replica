@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {FormGroup} from "@mui/material";
-import {CatalogFiltersCheckbox} from "@/components/CatalogFiltersCheckbox/CatalogFiltersCheckbox";
+import {CatalogFilterBrandsItem} from "@/components/CatalogFilterBrandsItem/CatalogFilterBrandsItem";
 
 interface ICatalogSelectFilterProps {
     title: string;

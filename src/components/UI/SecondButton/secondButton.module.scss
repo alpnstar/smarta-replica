@@ -1,0 +1,13 @@
+.second_button {
+  color: #e23d66;
+  background-color: transparent;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px #e23d66 solid;
+  &:hover {
+    color: #fff;
+    background-color: #e23d66;
+    transition: .1s linear;
+  }
+}
