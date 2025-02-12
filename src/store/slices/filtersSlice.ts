@@ -19,6 +19,7 @@ export const onChangeSearchParams: Middleware<object, RootState> = store => next
         || typedAction.type === filtersActions.deleteModelsParamsItem.type
         || typedAction.type === filtersActions.addModelsParamsItem.type
         || typedAction.type === filtersActions.setPriceParams.type
+        || typedAction.type === filtersActions.setSortParam.type
 
     ) {
         store.dispatch(filtersActions.generateSearchParams());
@@ -69,6 +70,7 @@ interface InitialState {
     modelsParams: IOrFilter,
     memoriesParams: IOrFilter,
     priceParams: IAndFilter,
+    sortParam: string | null,
 }
 
 const initialState: InitialState = {
@@ -80,6 +82,7 @@ const initialState: InitialState = {
     modelsParams: {$or: []},
     memoriesParams: {$or: []},
     priceParams: {$and: []},
+    sortParam: null,
 
 }
 const filtersSlice = createSlice({
@@ -138,8 +141,11 @@ const filtersSlice = createSlice({
         setPriceParams(state, {payload}: { payload: IAndFilter }) {
             state.priceParams = payload;
         },
-
+        setSortParam(state, {payload}: { payload: string | null }) {
+            state.sortParam = payload;
+        },
         generateSearchParams(state) {
+            const sort = state.sortParam ? {sort: [`price:${state.sortParam}`]} : null;
             state.generatedSearchParams = qs.stringify({
                     filters: {
                         $and: [
@@ -147,7 +153,8 @@ const filtersSlice = createSlice({
                             state.modelsParams,
                             state.priceParams
                         ]
-                    }
+                    },
+                    ...sort,
                 }
                 , {
                     encodeValuesOnly: true, // prettify URL

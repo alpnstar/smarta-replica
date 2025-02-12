@@ -1,7 +1,8 @@
 'use client';
-import React, {FC, useEffect, useState} from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import React, {FC} from "react";
 import qs from "qs";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {filtersActions} from "@/store/slices/filtersSlice";
 
 enum SortOrder {
     asc = 'asc',
@@ -9,37 +10,26 @@ enum SortOrder {
 }
 
 export const ProductSort: FC = () => {
-    const [sortParams, setSortParams] = useState<SortOrder | null>(null);
-    const router = useRouter();
-    const params = useSearchParams();
-    const path = usePathname();
+    const dispatch = useAppDispatch();
+    const sortParam = useAppSelector(state => state.filtersReducer.sortParam);
 
     function setSortParamsHandler(val: SortOrder) {
         let newSortParams;
-        if (sortParams === val) {
+        if (sortParam === val) {
             newSortParams = null;
 
         } else {
             newSortParams = val;
         }
-        foo(newSortParams);
-        setSortParams(newSortParams);
+        dispatch(filtersActions.setSortParam(newSortParams));
     }
 
-    function foo(sort) {
-        const parsedSearchParams = qs.stringify(qs.parse(params.toString()), {encodeValuesOnly: true});
-        const searchParamsCheck = parsedSearchParams ? '?' + parsedSearchParams : '';
-        const sortParamsCheck = `${sort ? `${searchParamsCheck ? '&' : '?'}` + 'sort=price:' + sort : ''}`;
-        router.push(path.toString() + searchParamsCheck + sortParamsCheck);
-
-
-    }
 
     return (
         <div className="products__sort">
-          <span className={`products__sort-item ${sortParams === SortOrder.asc ? '--active' : ''}`}
+          <span className={`products__sort-item ${sortParam === SortOrder.asc ? '--active' : ''}`}
                 onClick={() => setSortParamsHandler(SortOrder.asc)}>Сначала дешевле</span>
-            <span className={`products__sort-item ${sortParams === SortOrder.desc ? '--active' : ''}`}
+            <span className={`products__sort-item ${sortParam === SortOrder.desc ? '--active' : ''}`}
                   onClick={() => setSortParamsHandler(SortOrder.desc)}>Сначала дороже</span>
         </div>
 
