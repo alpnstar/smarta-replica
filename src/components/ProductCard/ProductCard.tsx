@@ -20,10 +20,10 @@ export const ProductCard: FC<IProductCardProps> = ({product}) => {
             <span className={styles.product_card_title}>{product.title}</span>
             <div className={styles.product_card_description}>
                 <div className={styles.product_card_prices}>
-                    {product.old_price ? <span
-                        className={styles.product_card_old_price}> <span
-                        className={styles.product_card_old_price_title}>{product.old_price} {product.currency}</span>
-                        <span className={styles.product_card_discount_size}>40%</span></span> : ''}
+                     <span
+                         className={styles.product_card_old_price}>{product.old_price ? <><span
+                         className={styles.product_card_old_price_title}>{product.old_price} {product.currency}</span><span
+                         className={styles.product_card_discount_size}>40%</span></> : ''}</span>
                     <h2>{product.price} {product.currency}</h2>
                 </div>
                 <MainButton fontSize={'16px'} padding={'11px 16px'}>Подробнее</MainButton>

@@ -1,12 +1,11 @@
 'use client';
 import React, {FC} from "react";
-import qs from "qs";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {filtersActions} from "@/store/slices/filtersSlice";
 
 enum SortOrder {
-    asc = 'asc',
-    desc = 'desc',
+    asc = 'price:asc',
+    desc = 'price:desc',
 }
 
 export const ProductSort: FC = () => {

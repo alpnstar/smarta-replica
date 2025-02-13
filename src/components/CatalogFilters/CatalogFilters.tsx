@@ -5,8 +5,9 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {filtersActions, getBrands, getModels} from "@/store/slices/filtersSlice";
 import {CatalogFilterBrandsSection} from "@/components/CatalogFilterBrandsSection/CatalogFilterBrandsSection";
 import qs from "qs";
-import {IAndFilter, IFilters, IOrFilter} from "@/types/catalogFilters";
+import {IAndFilter, IOrFilter} from "@/types/catalogFilters";
 import {CatalogFilterModelsSection} from "@/components/CatalogFilterModelsSection/CatalogFilterModelsSection";
+import {SecondButton} from "@/components/UI/SecondButton/SecondButton";
 
 function isIOrFilter(filter: any): filter is IOrFilter {
     return "$or" in filter;
@@ -22,6 +23,8 @@ export const CatalogFilters: FC = () => {
     const [endPrice, setEndPrice] = useState('');
 
     const router = useRouter();
+    const brandsParams = useAppSelector(state => state.filtersReducer.brandsParams);
+    const modelParams = useAppSelector(state => state.filtersReducer.modelsParams);
     const brands = useAppSelector(state => state.filtersReducer.brandsData);
     const models = useAppSelector(state => state.filtersReducer.modelsData);
     const generatedSearchParams = useAppSelector(state => state.filtersReducer.generatedSearchParams);
@@ -52,11 +55,17 @@ export const CatalogFilters: FC = () => {
     useEffect(() => {
         if (searchParams) {
             const parsedSearchParams: any = qs.parse(searchParams.toString());
-            const parsed: IFilters = parsedSearchParams;
+            const parsed: any = parsedSearchParams;
             const parsedFilters = parsed.filters;
 
+            if (parsed.pagination) {
+                dispatch(filtersActions.setPageParam(+parsed.pagination.page))
+            }
+            if (parsed.sort) {
+                dispatch(filtersActions.setSortParam(parsed.sort[0]));
+            }
             if (parsedFilters?.$and) {
-                parsedFilters.$and.forEach((item) => {
+                parsedFilters.$and.forEach((item:any) => {
                     if (isIOrFilter(item)) {
                         if (item.$or.some(el => 'brand_id' in el)) {
                             dispatch(filtersActions.setBrandsParams(item));
@@ -76,11 +85,16 @@ export const CatalogFilters: FC = () => {
                     }
                 });
             }
+
+
         }
     }, []);
 
     function clearFilters() {
-
+        dispatch(filtersActions.setBrandsParams({$or: []},));
+        dispatch(filtersActions.setModelsParams({$or: []},));
+        setStartPrice('');
+        setEndPrice('');
     }
 
     return (
@@ -115,10 +129,10 @@ export const CatalogFilters: FC = () => {
                            onChange={(e) => setEndPrice(e.target.value)}/>
                 </div>
             </div>
-            {/*{brandsParams.$or.length !== 0 || modelParams.$or.length !== 0 || priceParams.$and.length !== 0 ?*/}
-            {/*    <SecondButton fontSize={'16px'} padding={'16px 32px'} onClick={clearFilters}>Очистить*/}
-            {/*        фильтр</SecondButton> : ''*/}
-            {/*}*/}
+            {brandsParams.$or.length !== 0 || modelParams.$or.length !== 0 || startPrice !== '' || endPrice !== '' ?
+                <SecondButton fontSize={'16px'} padding={'16px 32px'} onClick={clearFilters}>Очистить
+                    фильтр</SecondButton> : ''
+            }
 
         </div>
 

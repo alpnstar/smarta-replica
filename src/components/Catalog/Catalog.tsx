@@ -5,6 +5,7 @@ import './catalog.scss';
 import {ApiResponse} from "@/types/api";
 import {Product} from "@/types/products";
 import {Breadcrumbs} from "@/components/UI/Breadcrumbs/Breadcrumbs";
+import {useAppDispatch} from "@/store/hooks";
 
 interface CatalogProps {
     searchParams?: string,
@@ -30,7 +31,7 @@ export const Catalog: FC<CatalogProps> = async ({searchParams}) => {
                     <aside>
                         <CatalogFilters/>
                     </aside>
-                    {data.data ? <ProductList products={data.data}/> : 'Ничего не найдено'}
+                    {data.data ? <ProductList products={data.data} meta = {data.meta}/> : 'Ничего не найдено'}
                 </div>
             </div>
         </div>
